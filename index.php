@@ -1,28 +1,52 @@
 <html>
   <head>
-    <title>PHP Test</title>
+    <title>Sorteador de Times</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <script src="assets/js/main.js"></script>
   </head>
   <body>
-    <?php 
+  <div class="container">
+        <h1>Sorteio de Times</h1>
+        <form method="post" action="">
+            <label for="players">Insira os nomes dos jogadores (separados por vírgula):</label>
+            <textarea id="players" name="players" rows="4" cols="50" onkeyup="countPlayers()"></textarea>
+            <span id="playerCount">0 jogadores</span><br><br>
 
-      
-      $perebas = array('Rafael Paiva', 'Rogerio', 'Jackson', 'Adelson', 'Jô', 'Mito' , 'Thiago', 'Garrafa', 'Yuri', 'Gonio', 'Ariel', 'Renan', 'Vinicius', 'Rodrigo', 'Bruno (convidado)');
-      shuffle($perebas);
+            <label for="players_team">Quantidade de jogadores por time:</label>
+            <select id="players_team" name="players_team">
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+            </select><br><br>
 
-      $players_team = 4;
+            <input type="submit" name="sortear" value="Sortear">
+        </form>
 
-      for($i = 0; $i < count($perebas); $i++){
-        if ($i % $players_team == 0) {
-          echo "Times" . ($i / $players_team + 1) . ": " ;
-          
-        }
-        echo $perebas[$i] . " - ";
-        if (($i + 1) % $players_team == 0) {
-          echo "<br><br>";
-        }
-      }
+        <div class="result">
+            <?php 
+            if (isset($_POST['sortear'])) {
+                $players_input = $_POST['players'];
+                $perebas = explode(',', $players_input);
+                $perebas = array_map('trim', $perebas); // Remove espaços em branco extras
+                shuffle($perebas);
 
-    ?> 
+                $players_team = (int)$_POST['players_team'];
 
+                for($i = 0; $i < count($perebas); $i++){
+                    if ($i % $players_team == 0) {
+                        echo "<div class='team'>Time " . (int)($i / $players_team + 1) . ": ";
+                    }
+                    echo $perebas[$i];
+                    if (($i + 1) % $players_team == 0) {
+                        echo "</div><br>";
+                    } else {
+                        echo " - ";
+                    }
+                }
+            }
+            ?> 
+        </div>
+    </div>
   </body>
 </html>
